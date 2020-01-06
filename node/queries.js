@@ -71,7 +71,34 @@ const deleteOrder = (request, response) => {
         response.status(200).send(`User deleted with ID: ${id}`)
     })
 }
+const updateOrder = (request, response) => {
+    const id = parseInt(request.params.id)
+    const { naming, sizes, statuses, quantity, custId } = request.body
 
+    pool.query('SELECT * FROM orders WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        if(results.rows[0].statuses == "Delivered"){
+            response.status(200).send(`Orders can't be modified with ID: ${id}`);
+            return;
+        }
+        else{
+            pool.query(
+                'UPDATE orders SET naming = $1, sizes = $2, statuses = $3, quantity = $4, custId = $5 WHERE id = $6',
+                [naming, sizes, statuses, quantity, custId, id],
+                (error, results) => {
+                    if (error) {
+                        throw error
+                    }
+                    response.status(200).send(`Orders modified with ID: ${id}`)
+                }
+            )
+        }
+    })
+
+
+}
 module.exports = {
     getUsers,
     getUserById,
@@ -79,5 +106,6 @@ module.exports = {
     getOrders,
     createOrder,
     getOrderById,
-    deleteOrder
+    deleteOrder,
+    updateOrder
 }

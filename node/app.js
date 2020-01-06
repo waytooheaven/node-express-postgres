@@ -23,6 +23,7 @@ app.get('/orders', db.getOrders)
 app.get('/orders/:id', db.getOrderById)
 app.post('/order', db.createOrder)
 app.delete('/orders/:id', db.deleteOrder)
+app.put('/orders/:id', db.updateOrder)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
