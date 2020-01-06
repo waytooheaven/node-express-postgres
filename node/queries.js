@@ -52,10 +52,18 @@ const getOrders = (request, response) => {
         response.status(200).json(results.rows)
     })
 }
+const getOrdersByStatus = (request, response) => {
+    const st = (request.params.status)
+    pool.query('SELECT * FROM orders where statuses = $1 ORDER BY id ASC', [st.toString().toLowerCase()], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
 const createOrder = (request, response) => {
     const { naming, sizes, statuses, quantity, custId } = request.body
-    console.log(request.body);
-    pool.query('INSERT INTO orders (naming, sizes, statuses, quantity, custid) VALUES ($1, $2, $3, $4, $5)', [naming, sizes, statuses, quantity, custId], (error, results) => {
+    pool.query('INSERT INTO orders (naming, sizes, statuses, quantity, custid) VALUES ($1, $2, $3, $4, $5)', [naming.toString().toLowerCase(), sizes.toString().toLowerCase(), statuses.toString().toLowerCase(), quantity, custId], (error, results) => {
         if (error) {
             throw error
         }
@@ -68,7 +76,7 @@ const deleteOrder = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).send(`User deleted with ID: ${id}`)
+        response.status(200).send(`Order deleted with ID: ${id}`)
     })
 }
 const updateOrder = (request, response) => {
@@ -86,7 +94,7 @@ const updateOrder = (request, response) => {
         else{
             pool.query(
                 'UPDATE orders SET naming = $1, sizes = $2, statuses = $3, quantity = $4, custId = $5 WHERE id = $6',
-                [naming, sizes, statuses, quantity, custId, id],
+                [naming.toString().toLowerCase(), sizes.toString().toLowerCase(), statuses.toString().toLowerCase(), quantity, custId, id],
                 (error, results) => {
                     if (error) {
                         throw error
@@ -96,8 +104,6 @@ const updateOrder = (request, response) => {
             )
         }
     })
-
-
 }
 module.exports = {
     getUsers,
@@ -107,5 +113,6 @@ module.exports = {
     createOrder,
     getOrderById,
     deleteOrder,
-    updateOrder
+    updateOrder,
+    getOrdersByStatus
 }
