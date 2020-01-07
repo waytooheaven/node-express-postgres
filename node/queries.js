@@ -61,6 +61,15 @@ const getOrdersByStatus = (request, response) => {
         response.status(200).json(results.rows)
     })
 }
+const getOrdersByUser = (request, response) => {
+    const userId = (request.params.id)
+    pool.query('SELECT * FROM orders where custid = $1', [userId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
 const createOrder = (request, response) => {
     const { naming, sizes, statuses, quantity, custId } = request.body
     pool.query('INSERT INTO orders (naming, sizes, statuses, quantity, custid) VALUES ($1, $2, $3, $4, $5)', [naming.toString().toLowerCase(), sizes.toString().toLowerCase(), statuses.toString().toLowerCase(), quantity, custId], (error, results) => {
@@ -114,5 +123,6 @@ module.exports = {
     getOrderById,
     deleteOrder,
     updateOrder,
-    getOrdersByStatus
+    getOrdersByStatus,
+    getOrdersByUser
 }
