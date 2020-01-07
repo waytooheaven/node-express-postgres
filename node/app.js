@@ -26,6 +26,11 @@ app.delete('/orders/:id', db.deleteOrder)
 app.put('/orders/:id', db.updateOrder)
 app.get('/orders/filter/status/:status', db.getOrdersByStatus)
 app.get('/orders/filter/user/:id', db.getOrdersByUser)
+//error handling
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
