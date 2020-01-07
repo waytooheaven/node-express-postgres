@@ -2,32 +2,23 @@
 
 Type "npm test" to activate test routes
 
-# the endpoint parts
+# The endpoint parts
 
 //user part
-app.get('/users', db.getUsers)
+app.get('/users', db.getUsers)<br/>
+app.get('/users/:id', db.getUserById)<br/>
+app.post('/user', db.createUser)<br/>
+//order part<br/>
+app.get('/orders', db.getOrders)<br/>
+app.get('/orders/:id', db.getOrderById)<br/>
+app.post('/order', db.createOrder)<br/>
+app.delete('/orders/:id', db.deleteOrder)<br/>
+app.put('/orders/:id', db.updateOrder)<br/>
+app.get('/orders/filter/status/:status', db.getOrdersByStatus)<br/>
+app.get('/orders/filter/user/:id', db.getOrdersByUser)<br/>
+app.get('/orders/track/:status', db.trackOrder)<br/>
 
-app.get('/users/:id', db.getUserById)
-
-app.post('/user', db.createUser)
-
-//order part
-app.get('/orders', db.getOrders)
-
-app.get('/orders/:id', db.getOrderById)
-
-app.post('/order', db.createOrder)
-
-app.delete('/orders/:id', db.deleteOrder)
-
-app.put('/orders/:id', db.updateOrder)
-
-app.get('/orders/filter/status/:status', db.getOrdersByStatus)
-
-app.get('/orders/filter/user/:id', db.getOrdersByUser)
-
-
-# database part
+# Database part
 
 ## 1 Create Orders Table
 CREATE TABLE public.orders
