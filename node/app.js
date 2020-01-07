@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
 const port = 3000
+const { handleError } = require('./helpers/error')
 
 app.use(bodyParser.json())
 app.use(
@@ -26,12 +27,11 @@ app.delete('/orders/:id', db.deleteOrder)
 app.put('/orders/:id', db.updateOrder)
 app.get('/orders/filter/status/:status', db.getOrdersByStatus)
 app.get('/orders/filter/user/:id', db.getOrdersByUser)
-//error handling
-app.use(function (err, req, res, next) {
-  console.error(err.stack)
-  res.status(500).send('Something broke!')
-})
-
+//error handling globally
+app.use((err, req, res, next) => {
+  handleError(err, res);
+});
+//the server part
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
