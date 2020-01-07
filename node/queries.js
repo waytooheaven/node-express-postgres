@@ -7,7 +7,7 @@ const pool = new Pool({
     port: 5432,
 })
 
-//users API backends
+//users API backends - user API is case sensitive
 const getUserById = (request, response) => {
     const id = parseInt(request.params.id)
     pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
@@ -106,8 +106,12 @@ const updateOrder = (request, response) => {
         if (error) {
             throw error
         }
-        if(results.rows[0].statuses == "Delivered"){
+        if(results.rows[0] != undefined && results.rows[0].statuses.toString().toLowerCase() == "delivered"){
             response.status(200).send(`Orders can't be modified with ID: ${id}`);
+            return;
+        }
+        else if(results.rows[0] == undefined){
+            response.status(200).send(`Orders can't be found with ID: ${id}`);
             return;
         }
         else{
