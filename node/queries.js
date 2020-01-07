@@ -61,6 +61,16 @@ const getOrdersByStatus = (request, response) => {
         response.status(200).json(results.rows)
     })
 }
+const trackOrder = (request, response) => {
+    const status = (request.params.status)
+    pool.query('SELECT * FROM orders where statuses = $1', [status.toString().toLowerCase()], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getOrdersByUser = (request, response) => {
     const userId = (request.params.id)
     pool.query('SELECT * FROM orders where custid = $1', [userId], (error, results) => {
@@ -124,5 +134,6 @@ module.exports = {
     deleteOrder,
     updateOrder,
     getOrdersByStatus,
-    getOrdersByUser
+    getOrdersByUser,
+    trackOrder
 }

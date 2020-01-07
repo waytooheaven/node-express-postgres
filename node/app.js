@@ -27,6 +27,7 @@ app.delete('/orders/:id', db.deleteOrder)
 app.put('/orders/:id', db.updateOrder)
 app.get('/orders/filter/status/:status', db.getOrdersByStatus)
 app.get('/orders/filter/user/:id', db.getOrdersByUser)
+app.get('/orders/track/:status', db.trackOrder)
 //error handling globally
 app.use((err, req, res, next) => {
   handleError(err, res);
